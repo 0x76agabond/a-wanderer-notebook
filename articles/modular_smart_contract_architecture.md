@@ -414,7 +414,7 @@ With smart contracts, there are multiple ways to do this, and each comes with tr
   → Unrelated parts of the system remain unaffected.
 
 - The smaller the domains, the smaller the scope of impact when something goes wrong.  
-  → The trade-off is higher organizational overhead, as the number of directories and files increases.  
+  → However, this comes with higher organizational overhead, as the number of directories and files increases.  
   → This is a trade-off teams should consider consciously.
 
 - This structure enables flexible working models.  
