@@ -213,7 +213,7 @@ At its core, Compose provides three core capabilities.
 
 **1. On-chain Predeployed Facets**
 
-- Compose offers a collection of **immutable, audited facets** that are already deployed on-chain at deterministic addresses, such as ERC20TransferFacet, ERC721TransferFacet, etc.
+- Compose offers a collection of **immutable, audited facets** that are already deployed on-chain at deterministic addresses, such as `ERC20TransferFacet`, `ERC721TransferFacet`, etc.
 
 - When using these, a project only needs to deploy a Diamond proxy and add the required function selectors to start using the functionality immediately.
 
@@ -231,7 +231,7 @@ Diamonds are flexible by design, but relying only on predeployed facets would lo
 
 - For projects that, for any reason, cannot or do not want to use predeployed on-chain facets, Compose also provides standalone facet implementations.
 
-- Developers can deploy and use their own versions of facets, such as an ERC20Facet, without relying on Compose’s predeployed contracts, while still following the same architecture and compatibility rules.
+- Developers can deploy and use their own versions of facets, such as an `ERC20Facet`, without relying on Compose’s predeployed contracts, while still following the same architecture and compatibility rules.
 
 **A Very Different Way to Approach Dapps**
 
@@ -456,7 +456,7 @@ There is an interesting observation behind this approach:
 
 - We can clearly separate the concepts of ownership and upgradeability.
 
-In practice, this resolves one of the most common tensions in smart contract development by allowing teams to move fast and stay flexible during development while still delivering a trustworthy and immutable system at launch.
+In practice, this resolves one of the most common tensions in smart contract development by allowing us to move fast and stay flexible during development while still delivering a trustworthy and immutable system at launch.
 
 
 
