@@ -386,8 +386,6 @@ From time to time, storage updates or code refactors are still required. However
 
 ### Team collaboration
 
-This is where Diamonds really stand out.  
-
 Many of the problems teams face are similar to those of solo developers. In practice, they are often even more complex.
 
 Without a consistent architecture, work cannot be divided cleanly, and developers inevitably start stepping on each other’s toes. This is the first thing that must be managed.
