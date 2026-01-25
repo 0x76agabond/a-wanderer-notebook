@@ -277,7 +277,7 @@ If your project is performance critical, has very few functions, and you are sur
 
 You may still consider a hybrid approach: 
 - Keep the core logic in an immutable contract, and use Diamond only as an extension layer via hooks.  
-- This can reduce the number of contracts you need to deploy and manage, but it is a very project-specific decision.
+- This can reduce the number of contracts you need to manage, but it is a very project-specific decision.
 
 If your project needs to ship fast with a limited budget, check whether the features you need are already supported by Compose.  
 → If they are, do a quick internal review of the relevant predeployed facets.  
