@@ -133,7 +133,7 @@ From that point of view, some solutions start to make more sense. One of them is
 Diamond addresses these needs at both the function and storage level.  
 By operating on function selectors and enforcing clear boundaries between logic and storage, it provides a practical foundation for modular smart contract systems under EVM constraints.
 
-![Modular Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond.png)
+![Diamond](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond.png)
 
 ### **What Is New with Diamonds in 2026?**
 
@@ -206,6 +206,8 @@ In practice, this kind of isolation and organization makes Diamond systems easie
 
 ### Compose  
 *A smart contract library that helps developers build modular smart contract systems.*
+
+![Compose](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond.png)
 
 Compose represents a new generation of Diamond tooling, built around a **Smart Contract Oriented Programming (SCOP)** approach.
 
