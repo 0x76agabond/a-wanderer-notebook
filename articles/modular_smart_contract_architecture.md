@@ -8,7 +8,7 @@ Each part can function independently as a standalone application, or be composed
 
 The key idea is that each component defines a clear boundary of responsibility. This organizes the system into distinct logical units that can be developed, reasoned about, and evolved without requiring full knowledge of the entire system.
 
-![Modular Design](https://drive.google.com/uc?export=view&id=18qob_-BdaPk-HqCVDcgk-nAeNNOyAYd5)
+![Modular Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/modular.png)
 
 ### **The Real Goal of Modular Design**
 
@@ -133,7 +133,7 @@ From that point of view, some solutions start to make more sense. One of them is
 Diamond addresses these needs at both the function and storage level.  
 By operating on function selectors and enforcing clear boundaries between logic and storage, it provides a practical foundation for modular smart contract systems under EVM constraints.
 
-![Modular Design](https://drive.google.com/uc?export=view&id=1MPigE97YWJlhSph-6TygtfK3YTpMV8KP)
+![Modular Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond.png)
 
 ### **What Is New with Diamonds in 2026?**
 
@@ -168,7 +168,7 @@ Because of that, getting familiar with ERC-8109 is the recommended starting poin
 ### ERC-8110: Domain Architecture for Diamonds
 *An architectural pattern that organizes Diamond storage by domain using ERC-8042 identifiers.*
 
-![8110_Design](https://drive.google.com/uc?export=view&id=1bAF2_JtVIU6U3FVFwn0tU3lwH3yO3JgP)
+![8110_Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond8110.png)
 
 ERC-8110 introduces a new way to organize code and manage storage in Diamond-based systems, built around the idea of domains.
 
