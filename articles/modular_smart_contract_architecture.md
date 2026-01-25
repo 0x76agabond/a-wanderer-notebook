@@ -207,7 +207,7 @@ In practice, this kind of isolation and organization makes Diamond systems easie
 ### Compose  
 *A smart contract library that helps developers build modular smart contract systems.*
 
-<img src="https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/Compose.jpg" width="400">
+<img src="https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/Compose.jpg" width="500">
 
 Compose represents a new generation of Diamond tooling, built around a **Smart Contract Oriented Programming (SCOP)** approach.
 
