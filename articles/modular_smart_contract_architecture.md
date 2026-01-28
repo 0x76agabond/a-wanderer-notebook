@@ -57,7 +57,9 @@ One of the most frustrating things about starting a new project is not knowing h
 When teams already have experience or existing references, this is manageable.
 But when the project is new or no solution clearly fits, things can quickly become messy.
 
-This often leads to building new features while refactoring existing code at the same time, which is how technical debt accumulates.
+This often leads to building new features while reorganizing existing code, which fragments focus and introduces unnecessary overhead.
+
+Under time pressure, this can push developers to accept partial, patchwork solutions, which accumulate technical debt over time.
 
 **Modular design helps developers in several ways.**
 
@@ -135,6 +137,53 @@ By operating on function selectors and enforcing clear boundaries between logic 
 
 ![Diamond](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond.png)
 
+To put theory into practice, let’s look at how Diamond separates state from logic through a decoupled storage pattern.
+
+**Storage example**
+
+```solidity
+bytes32 constant STORAGE_POSITION = keccak256("storage.identifier");
+
+struct Storage {
+    uint256 value;
+}
+
+function storage_() internal pure returns (Storage storage s) {
+    bytes32 position = STORAGE_POSITION;
+    assembly {
+        s.slot := position
+    }
+}
+```
+
+**Facet example**
+
+```solidity
+contract Facet {
+    function setValue(uint256 _value) external {
+        Storage storage s = storage_();
+        s.value = _value;
+    }
+
+    function getValue() external view returns (uint256) {
+        Storage storage s = storage_();
+        return s.value;
+    }
+}
+```
+
+**In this model**
+
+- Storage does not need to know which logic interacts with it.  
+It defines the state structure and provides a deterministic access point to that state.
+
+- Facet and selectors does not need to understand how storage is globally organized.   
+It only interacts with the specific state required to perform its behavior.
+
+You may worry about keccak collisions, but even with quantum techniques, existing attacks only apply to reduced-round variants and are not a practical concern for the 24-rounds keccak used in the EVM, as discussed [here](https://link.springer.com/chapter/10.1007/978-3-031-22969-5_22).
+
+In addition, Solidity also relies on keccak internally to derive storage locations for mappings and dynamic arrays, as described in the [language documentation](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html#mappings-and-dynamic-arrays).
+
 ### **What Is New with Diamonds in 2026?**
 
 When the Diamond Standard was first introduced, its primary goal was to overcome the 24KB contract size limit.  
@@ -166,7 +215,7 @@ Overall, it provides the necessary information to build a clearer mental model.
 Because of that, getting familiar with ERC-8109 is the recommended starting point before diving deeper.
 
 ### ERC-8110: Domain Architecture for Diamonds
-*An architectural pattern that organizes Diamond storage by domain using ERC-8042 identifiers.*
+*An architectural pattern that organizes Diamond Storage by domain using ERC-8042 identifiers.*
 
 ![8110_Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond8110.png)
 
@@ -184,7 +233,7 @@ In other words, instead of organizing a Diamond primarily around facets, ERC-811
 
 **So what does this actually give us?**
 
-- It isolates storage at the architectural level, making storage collisions conceptually almost impossible, except for a keccak collision or plain human error.
+- It isolates storage at the architectural level, making storage collisions conceptually impossible except through plain human error.
 
 - It decouples logic from state management. Once storage is organized by domain, upgrades become more predictable and follow a clear structure instead of relying on fragile conventions.
 
@@ -213,13 +262,16 @@ Compose represents a new generation of Diamond tooling, built around a **Smart C
 
 At its core, Compose provides three core capabilities.
 
-**1. On-chain Predeployed Facets**
+**1. On-chain Predeployed Facets (Not Ready Yet)**
 
-- Compose offers a collection of **immutable, audited facets** that are already deployed on-chain at deterministic addresses, such as `ERC20TransferFacet`, `ERC721TransferFacet`, etc.
+Compose is still at an early stage, and this capability is not available yet.  
+However, the idea is central to the long-term direction of the project and too valuable to ignore, so it is worth calling out explicitly.
 
-- When using these, a project only needs to deploy a Diamond proxy and add the required function selectors to start using the functionality immediately.
+- Compose plans to offer a collection of immutable, audited facets deployed on-chain at deterministic addresses, such as `ERC20TransferFacet`, `ERC721TransferFacet`, etc.
 
-This significantly reduces deployment effort and setup cost, especially for common standards.
+- With this approach, a project would only need to deploy a Diamond proxy and register the required function selectors to start using the functionality immediately.
+
+This direction aims to significantly reduce deployment effort and setup costs, especially for widely used standards.
 
 **2. Modules Compatible with On-chain Facets**
 
@@ -457,6 +509,5 @@ There is an interesting observation behind this approach:
 - We can clearly separate the concepts of ownership and upgradeability.
 
 In practice, this resolves one of the most common tensions in smart contract development by allowing us to move fast and stay flexible during development while still delivering a trustworthy and immutable system at launch.
-
 
 
