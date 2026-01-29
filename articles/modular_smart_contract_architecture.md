@@ -8,7 +8,7 @@ Each part can function independently as a standalone application, or be composed
 
 The key idea is that each component defines a clear boundary of responsibility. This organizes the system into distinct logical units that can be developed, reasoned about, and evolved without requiring full knowledge of the entire system.
 
-![Modular Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/modular.png)
+![Modular Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/modular_smart_contract_architecture/modular.png)
 
 ### **The Real Goal of Modular Design**
 
@@ -135,7 +135,7 @@ From that point of view, some solutions start to make more sense. One of them is
 Diamond addresses these needs at both the function and storage level.  
 By operating on function selectors and enforcing clear boundaries between logic and storage, it provides a practical foundation for modular smart contract systems under EVM constraints.
 
-![Diamond](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond.png)
+![Diamond](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/modular_smart_contract_architecture/diamond.png)
 
 To put theory into practice, let’s look at how Diamond separates state from logic through a decoupled storage pattern.
 
@@ -217,7 +217,7 @@ Because of that, getting familiar with ERC-8109 is the recommended starting poin
 ### ERC-8110: Domain Architecture for Diamonds
 *An architectural pattern that organizes Diamond storage by domain using ERC-8042 identifiers.*
 
-![8110_Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond8110.png)
+![8110_Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/modular_smart_contract_architecture/diamond8110.png)
 
 ERC-8110 introduces a new way to organize code and manage storage in Diamond-based systems, built around the idea of domains.
 
@@ -256,7 +256,7 @@ In practice, this kind of isolation and organization makes Diamond systems easie
 ### Compose  
 *A smart contract library that helps developers build modular smart contract systems.*
 
-<img src="https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/Compose.jpg" width="500">
+<img src="https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/modular_smart_contract_architecture/Compose.jpg" width="500">
 
 Compose represents a new generation of Diamond tooling, built around a **Smart Contract Oriented Programming (SCOP)** approach.
 
