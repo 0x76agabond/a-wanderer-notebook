@@ -148,7 +148,7 @@ struct Storage {
     uint256 value;
 }
 
-function getstorage() internal pure returns (Storage storage s) {
+function getStorage() internal pure returns (Storage storage s) {
     bytes32 position = STORAGE_POSITION;
     assembly {
         s.slot := position
@@ -161,12 +161,12 @@ function getstorage() internal pure returns (Storage storage s) {
 ```solidity
 contract Facet {
     function setValue(uint256 _value) external {
-        Storage storage s = getstorage();
+        Storage storage s = getStorage();
         s.value = _value;
     }
 
     function getValue() external view returns (uint256) {
-        Storage storage s = getstorage();
+        Storage storage s = getStorage();
         return s.value;
     }
 }
@@ -177,8 +177,8 @@ contract Facet {
 - Storage does not need to know which logic interacts with it.  
 It defines the state structure and provides a deterministic access point to that state.
 
-- Facet and selectors does not need to understand how storage is globally organized.   
-It only interacts with the specific state required to perform its behavior.
+- Facets and selectors do not need to understand how storage is globally organized.   
+They only interacts with the specific state required to perform its behavior.
 
 You may worry about keccak collisions, but even with quantum techniques, existing attacks only apply to reduced-round variants and are not a practical concern for the 24-rounds keccak used in the EVM, as discussed [here](https://link.springer.com/chapter/10.1007/978-3-031-22969-5_22).
 
@@ -215,7 +215,7 @@ Overall, it provides the necessary information to build a clearer mental model.
 Because of that, getting familiar with ERC-8109 is the recommended starting point before diving deeper.
 
 ### ERC-8110: Domain Architecture for Diamonds
-*An architectural pattern that organizes Diamond Storage by domain using ERC-8042 identifiers.*
+*An architectural pattern that organizes Diamond storage by domain using ERC-8042 identifiers.*
 
 ![8110_Design](https://raw.githubusercontent.com/0x76agabond/a-wanderer-notebook/refs/heads/main/images/diamond8110.png)
 
@@ -262,7 +262,7 @@ Compose represents a new generation of Diamond tooling, built around a **Smart C
 
 At its core, Compose provides three core capabilities.
 
-**1. On-chain Predeployed Facets (Not Ready Yet)**
+**1. On-chain Predeployed Facets (Roadmap)**
 
 **Compose is still at an early stage, and this capability is not available yet**.  
 However, the idea is central to the long-term direction of the project and too valuable to ignore, so it is worth calling out explicitly.
@@ -337,7 +337,7 @@ If your project needs to ship fast with a limited budget, check whether the feat
 
 If your project needs to ship fast and is supported by Compose, but security or business requirements prevent you from using predeployed facets, meaning you must deploy everything yourself, then the decision depends on what you value.
 
-If you or your team care about code readability, maintainability, a clean architecture, and long term sustainability.  
+If you or your team care about code readability, maintainability, a clean architecture, and long-term sustainability.  
 → Treat Diamond as an investment. Start with ERC-8109, audit the Compose features you plan to use, and build from there.
 
 What if Compose does not support your feature yet?  
@@ -383,7 +383,7 @@ As the system grows and domains become clearer, you can introduce new domains an
 
 Setting up this structure early also makes the project easier to read and reason about for developers. More importantly, it allows the system to keep improving both during development and after deployment, without forcing painful trade-offs or refactors.
 
-### **For long term projects**
+### **For long-term projects**
 
 This is where Diamonds shine.  
 Their nature fits projects that are expected to change over time, while remaining readable, manageable, and easy to audit.  
@@ -509,5 +509,3 @@ There is an interesting observation behind this approach:
 - We can clearly separate the concepts of ownership and upgradeability.
 
 In practice, this resolves one of the most common tensions in smart contract development by allowing us to move fast and stay flexible during development while still delivering a trustworthy and immutable system at launch.
-
-
