@@ -148,7 +148,7 @@ struct Storage {
     uint256 value;
 }
 
-function storage_() internal pure returns (Storage storage s) {
+function getstorage() internal pure returns (Storage storage s) {
     bytes32 position = STORAGE_POSITION;
     assembly {
         s.slot := position
@@ -161,12 +161,12 @@ function storage_() internal pure returns (Storage storage s) {
 ```solidity
 contract Facet {
     function setValue(uint256 _value) external {
-        Storage storage s = storage_();
+        Storage storage s = getstorage();
         s.value = _value;
     }
 
     function getValue() external view returns (uint256) {
-        Storage storage s = storage_();
+        Storage storage s = getstorage();
         return s.value;
     }
 }
@@ -264,7 +264,7 @@ At its core, Compose provides three core capabilities.
 
 **1. On-chain Predeployed Facets (Not Ready Yet)**
 
-Compose is still at an early stage, and this capability is not available yet.  
+**Compose is still at an early stage, and this capability is not available yet**.  
 However, the idea is central to the long-term direction of the project and too valuable to ignore, so it is worth calling out explicitly.
 
 - Compose plans to offer a collection of immutable, audited facets deployed on-chain at deterministic addresses, such as `ERC20TransferFacet`, `ERC721TransferFacet`, etc.
