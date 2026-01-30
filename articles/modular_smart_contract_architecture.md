@@ -180,7 +180,9 @@ It defines the state structure and provides a deterministic access point to that
 - Facets and selectors do not need to understand how storage is globally organized.   
 They only interacts with the specific state required to perform its behavior.
 
-You may worry about keccak collisions, but even with quantum techniques, existing attacks only apply to reduced-round variants and are not a practical concern for the 24-rounds keccak used in the EVM, as discussed [here](https://link.springer.com/chapter/10.1007/978-3-031-22969-5_22).
+→ This decoupling forms the foundation for state and logic to evolve independently over time.
+
+You might worry about keccak collisions, but even with quantum techniques, collision experiments only succeed on reduced-round variants. Collisions on the full 24-round Keccak used in the EVM remain impractical, as discussed [here](https://link.springer.com/chapter/10.1007/978-3-031-22969-5_22).
 
 In addition, Solidity also relies on keccak internally to derive storage locations for mappings and dynamic arrays, as described in the [language documentation](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html#mappings-and-dynamic-arrays).
 
@@ -300,6 +302,47 @@ However, when you look at it more closely from an EVM perspective, it reveals a 
 
 Taken together, Compose doesn’t just optimize deployment or reuse code.
 It changes how smart contracts can be assembled, evolved, and shipped in practice.
+
+### Natural Identifier Separation 
+
+By now, we have a cleaner Diamond model, a new library, and a new way to organize source code.
+
+But there is a question.  
+**What happens if Compose’s storage identifiers overlap with the identifiers used by our application?**
+
+At first glance, this sounds like something we would need to manually manage.  
+We would review the identifiers used by the Compose facets or modules we want to adopt, then pick application identifiers that avoid conflicts.
+
+That works, but it adds a small, unnecessary annoyance. Thinking through naming for meaning is fine, but having to do it just to avoid collisions is friction we shouldn’t need. 
+Luckily, the solution is already there, and it’s much more elegant.
+
+First, notice the scope difference.  
+ERC-8110 is a convention for organizing application-level storage and custom logic.  
+It doesn’t try to define naming rules for libraries or standard implementations.
+
+**ERC-8110 identifier format**
+
+```text
+  {org}.{project}.{domain_type}.{domain_name}.{version}
+```
+
+**Compose identifier**
+
+```solidity
+  /// @notice Format: {standard}
+  bytes32 constant STORAGE_POSITION = keccak256("erc20");
+
+  /// @notice Format: {standard}.{feature}
+  bytes32 constant STORAGE_POSITION = keccak256("erc20.metadata");
+```
+
+These two formats are structurally different, and that difference matters.  
+  
+An ERC-8110 application can reuse Compose facets and modules without worrying about identifier overlap, because the identifier spaces are distinct by design.  
+In practice, you can plug Compose in and move forward without turning naming into a coordination problem.
+
+And you don’t strictly need ERC-8110 to get this benefit.  
+You just need an application identifier format that cannot collide with Compose’s standard-based format.
 
 ## **3. Diamonds as a Development Framework**
 
