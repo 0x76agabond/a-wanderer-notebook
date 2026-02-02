@@ -1,5 +1,36 @@
 # **Modular Smart Contract Architecture**
 
+## **Contents**  
+
+1. [What Is Modular Design](#1-what-is-modular-design)
+   - [The Real Goal of Modular Design](#the-real-goal-of-modular-design)
+   - [Modular Design as Native Separation of Concerns](#modular-design-as-native-separation-of-concerns)
+   - [Why Modular Design doesn't slow you down](#why-modular-design-doesnt-slow-you-down)
+   - [Modular Design Helps Organize Work More Effectively](#modular-design-helps-organize-work-more-effectively)
+   - [Conclusion](#conclusion)
+
+2. [Modular design for Smart Contracts](#2-modular-design-for-smart-contracts)
+   - [From Web2 Principles to Web3 Reality](#from-web2-principles-to-web3-reality)
+   - [Reframing Modular Design in Smart Contracts](#reframing-modular-design-in-smart-contracts)
+   - [What Is New with Diamonds in 2026?](#what-is-new-with-diamonds-in-2026)
+   - [ERC-8109 (Diamonds, Simplified)](#erc-8109-diamonds-simplified)
+   - [ERC-8110 Domain Architecture for Diamonds](#erc-8110-domain-architecture-for-diamonds)
+   - [Compose](#compose)
+   - [Natural Identifier Separation](#natural-identifier-separation)
+
+3. [Diamonds as Development Framework](#3-diamonds-as-development-framework)
+   - [Before we start](#before-we-start)
+   - [For small and fast-moving projects](#for-small-and-fast-moving-projects)
+   - [For long-term projects](#for-long-term-projects)
+   - [Incremental Development](#incremental-development)
+   - [A solo developer’s story](#a-solo-developers-story)
+   - [Team collaboration](#team-collaboration)
+   - [Immutable Diamonds](#immutable-diamonds)
+   - [Conclusion](#conclusion-1)
+
+4. [Acknowledgements](#acknowledgements)
+
+
 ## **1. What Is Modular Design**
 
 Modular design is an architectural approach that organizes a system into independent parts, each owning a clearly defined responsibility.  
@@ -12,7 +43,7 @@ The key idea is that each component defines a clear boundary of responsibility. 
 
 ### **The Real Goal of Modular Design**
 
-Modular design is often associated with benefits such as maintainability, reusability, scalability, and parallel development.
+Modular design is often associated with benefits such as maintainability, reusability, scalability, and upgradability.
 In practice, these are outcomes rather than the primary goal.
 
 The core goal of modular design is how a system is organized, and how developer attention is directed while working on it.
@@ -60,6 +91,19 @@ But when the project is new or no solution clearly fits, things can quickly beco
 This often leads to building new features while reorganizing existing code, which fragments focus and introduces unnecessary overhead.
 
 Under time pressure, this can push developers to accept partial, patchwork solutions, which accumulate technical debt over time.
+
+**Modular design is one way to overcome this challenge.**
+
+By separating system-level operational logic from business logic, and isolating business logic into clearly defined blocks, modular design produces several very practical effects:
+
+- Lower organizational overhead.  
+Adding or changing business features rarely requires reorganizing the system core.
+
+- Safer refactoring.  
+Even when core logic needs to be refactored, as long as module behavior remains unchanged, business logic usually does not need to be modified.
+
+As a result, both core logic and business logic become isolated and easier to reason about.  
+Refactoring or reorganizing the system is no longer a vague or risky activity, but a clearly scoped and manageable task.
 
 **Modular design helps developers in several ways.**
 
@@ -182,7 +226,7 @@ They only interacts with the specific state required to perform its behavior.
 
 → This decoupling forms the foundation for state and logic to evolve independently over time.
 
-You might worry about keccak collisions, but even with quantum techniques, collision experiments only succeed on reduced-round variants. Collisions on the full 24-round Keccak used in the EVM remain impractical, as discussed [here](https://link.springer.com/chapter/10.1007/978-3-031-22969-5_22).
+You might worry about keccak collisions, but even with quantum techniques, collision experiments only succeed on reduced-round variants. Collisions on the full-round Keccak used in the EVM remain impractical, as discussed [here](https://link.springer.com/chapter/10.1007/978-3-031-22969-5_22).
 
 In addition, Solidity also relies on keccak internally to derive storage locations for mappings and dynamic arrays, as described in the [language documentation](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html#mappings-and-dynamic-arrays).
 
@@ -196,7 +240,7 @@ As the ecosystem evolved and real-world usage increased, it started to feel like
 Its natural separation of logic and storage turned out to be a strong foundation for modular design.
 This structure supports incremental development, parallel work, and clearer ownership of responsibilities as systems grow.
 
-Diamond represent a different approach that provides a strong foundation for projects to grow, evolving from simple setups into larger systems.
+Diamond represents a different approach that provides a strong foundation for projects to grow, evolving from simple setups into larger systems.
 
 Here are a few efforts from the Diamond community. Let’s see what each one offers:
 
@@ -308,22 +352,20 @@ It changes how smart contracts can be assembled, evolved, and shipped in practic
 By now, we have a cleaner Diamond model, a new library, and a new way to organize source code.
 
 But there is a question.  
-**What happens if Compose’s storage identifiers overlap with the identifiers used by our application?**
+> *What happens if Compose’s storage identifiers overlap with the identifiers used by our application?*
 
-At first glance, this sounds like something we would need to manually manage.  
-We would review the identifiers used by the Compose facets or modules we want to adopt, then pick application identifiers that avoid conflicts.
-
-That works, but it adds a small, unnecessary annoyance. Thinking through naming for meaning is fine, but having to do it just to avoid collisions is friction we shouldn’t need. 
-Luckily, the solution is already there, and it’s much more elegant.
+At first glance, this may look like an annoying problem, but in practice, it’s already solved.
 
 First, notice the scope difference.  
-ERC-8110 is a convention for organizing application-level storage and custom logic.  
-It doesn’t try to define naming rules for libraries or standard implementations.
+ERC-8110 is a standard for organizing application-level storage and custom logic.
+It does not define or compete with identifier schemes used at the library or standard level, such as those used by Compose.
 
 **ERC-8110 identifier format**
 
-```text
-  {org}.{project}.{domain_type}.{domain_name}.{version}
+```solidity
+  /// @notice Format: {org}.{project}.{domain_type}.{domain_name}.{version}
+  /// @custom:storage-location erc8042:org.project.system.domain.v1
+bytes32 constant DOMAIN_STORAGE_POSITION = keccak256("org.project.system.domain.v1");
 ```
 
 **Compose identifier**
@@ -336,15 +378,15 @@ It doesn’t try to define naming rules for libraries or standard implementation
   bytes32 constant STORAGE_POSITION = keccak256("erc20.metadata");
 ```
 
-These two formats are structurally different, and that difference matters.  
-  
-An ERC-8110 application can reuse Compose facets and modules without worrying about identifier overlap, because the identifier spaces are distinct by design.  
+These two formats are structurally different, resulting in two completely separate identifier spaces.
+
+An ERC-8110 application can reuse Compose facets and modules without worrying about identifier overlap, because the identifier spaces are distinct by design.
 In practice, you can plug Compose in and move forward without turning naming into a coordination problem.
 
-And you don’t strictly need ERC-8110 to get this benefit.  
-You just need an application identifier format that cannot collide with Compose’s standard-based format.
+This is not specific to Compose and ERC-8110.
+In practice, any Diamond library and application can work together this way, as long as application-level and library-level identifiers follow different, non-colliding formats.
 
-## **3. Diamonds as a Development Framework**
+## **3. Diamonds as Development Framework**
 
 At this point, we can probably agree on one thing. **Diamonds give us a solid foundation for modular smart contract design.**
 
@@ -361,29 +403,47 @@ Before diving deeper, it’s worth setting a clear scope for this section.
 
 - Since this discussion focuses on Diamonds, we’ll avoid comparisons with other patterns. Readers are still encouraged to think about alternatives and ask themselves how the same problems might look if approached with a different pattern.
 
+- Because we are still early. ERC-8109 and ERC-8110 are both in draft stage, and Compose itself is also early.  
+Readers should treat this part as an introduction rather than a must-have best practice.
+
 Let's learn together.
 
 ### **For small and fast-moving projects**
 
 First, take a step back and look at your project.
 
-If your project is performance critical, has very few functions, and you are sure it will never need upgrades.  
+**If your project is performance critical, has very few functions, and you are sure it will never need upgrades.**   
 → Use a monolithic immutable contract. Diamond is not a good fit for this case.  
 
 You may still consider a hybrid approach: 
 - Keep the core logic in an immutable contract, and use Diamond only as an extension layer via hooks.  
-- This can reduce the number of contracts you need to manage, but it is a very project-specific decision.
+- This can reduce the number of components you need to manage, but it is a very project-specific decision.
 
-If your project needs to ship fast with a limited budget, check whether the features you need are already supported by Compose.  
+**If your project needs to ship fast with a limited budget.**  
+
+At a later stage of Compose, when predeployed facets are available, you can approach it this way:
+- Check whether the features you need are already supported by Compose.  
 → If they are, do a quick internal review of the relevant predeployed facets.  
 → If they fit your needs, jackpot! Just deploy the Diamond, add selectors from predeployed facets, write some tests, and go grab a coffee.
 
-If your project needs to ship fast and is supported by Compose, but security or business requirements prevent you from using predeployed facets, meaning you must deploy everything yourself, then the decision depends on what you value.
+For now, since Compose does not support predeployed facets yet, we will focus on modules and facet implementations.  
 
-If you or your team care about code readability, maintainability, a clean architecture, and long-term sustainability.  
+Which approach to use here depends heavily on your team and your project requirements.
+- If you or your team care about code readability, maintainability, clean architecture, and long-term sustainability: 
 → Treat Diamond as an investment. Start with ERC-8109, audit the Compose features you plan to use, and build from there.
 
-What if Compose does not support your feature yet?  
+- You can also audit the available facet implementations.  
+→ If they fit your needs, you can deploy the facets, deploy the Diamond proxy, add the selectors, and start using them right away.  
+→ This reduces implementation effort while still giving you the organizational and flexibility benefits of Diamonds.  
+→ Later on, when changes are needed, you can add or remove selectors via modules.  
+→ Depending on the situation, you may either redeploy the full facet for consistency, or deploy a smaller facet containing only the updated functions to optimize gas usage.  
+
+Diamond gives you a high degree of freedom in choosing solutions.
+There are no hard technical constraints — the real question is simply what your goals are, and what your project actually cares about.
+
+With this development model, you can still start fast and have a clear path to come back and fix things when they break.
+
+**What if Compose does not support your feature yet?**  
 If you want to, you can open an issue on their GitHub. It’s worth a try.  
 Compose is still evolving, and many features start from real project needs.  
 
@@ -552,3 +612,18 @@ There is an interesting observation behind this approach:
 - We can clearly separate the concepts of ownership and upgradeability.
 
 In practice, this resolves one of the most common tensions in smart contract development by allowing us to move fast and stay flexible during development while still delivering a trustworthy and immutable system at launch.
+
+### **Conclusion**
+
+Diamond is no longer just a pattern for bypassing the 24KB contract size limit.
+
+It has evolved into a way of thinking about how smart contract systems are designed, structured, and developed over time.
+A mental and architectural framework, rather than just a technical workaround.
+
+Diamond enables capabilities that were previously difficult, or even impractical, in traditional smart contract development — such as incremental evolution, parallel work, and long-term maintainability under immutability constraints.
+
+Like any powerful tool, Diamond needs to be understood and used correctly to unlock its full potential.
+It does require learning a few foundational concepts, but in return, it offers a system that is more sustainable, transparent, and resilient as it grows.
+
+## **Acknowledgements**
+Nick Mudge ([@mudgen](https://github.com/mudgen)), and contributors from the Diamond / Compose community.
