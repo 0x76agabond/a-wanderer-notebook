@@ -365,7 +365,7 @@ It does not define or compete with identifier schemes used at the library or sta
 ```solidity
   /// @notice Format: {org}.{project}.{domain_type}.{domain_name}.{version}
   /// @custom:storage-location erc8042:org.project.system.domain.v1
-bytes32 constant DOMAIN_STORAGE_POSITION = keccak256("org.project.system.domain.v1");
+  bytes32 constant DOMAIN_STORAGE_POSITION = keccak256("org.project.system.domain.v1");
 ```
 
 **Compose identifier**
