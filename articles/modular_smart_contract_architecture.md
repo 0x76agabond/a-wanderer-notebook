@@ -253,7 +253,7 @@ ERC-8109 reduces the cognitive load of working with Diamonds by clarifying how s
 
 - How explorers, indexers, and tooling should interact with Diamonds.
 
-- How introspection behavior is expected to work.
+- How upgrade and introspection behavior is expected to work.
 
 On top of that, ERC-8109 explicitly documents several important behaviors that are easy to miss in real-world implementations, such as ownership, shared and composed facets, immutable Diamonds or immutable functions,  etc.
 
